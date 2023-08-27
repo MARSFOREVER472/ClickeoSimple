@@ -33,7 +33,7 @@ namespace SimpleClickingGame
         int indiceAparicion = 60; // Este es el índice de aparición predeterminado para cada círculo o elipse.
         int indiceActual; // El índice actual ayudará a agregar un intervalo entre el desove de los círculos.
         int puntuacionFinal = 0; // Esto contendrá el puntaje final logrado para este juego.
-        int salud = 300; // Salud total del jugador al momento de inicializar el juego.
+        int saludActual = 300; // Salud total del jugador al momento de inicializar el juego.
         int posicionX; // Posición en x para cada objeto circular.
         int posicionY; // Posición en y para cada objeto circular.
         int puntuacion = 0; // Puntuación actual del juego.
@@ -57,8 +57,28 @@ namespace SimpleClickingGame
         Brush nuevoPincel;
 
         public MainWindow()
-        {
+        { 
             InitializeComponent();
+
+            // Dentro del constructor principal de esta clase se establecerá un algoritmo para el comienzo del juego.
+
+            temporizadorJuego.Tick += GameLoop; // Se configura el evento del temporizador del juego llamado "GameLoop".
+            temporizadorJuego.Interval = TimeSpan.FromMilliseconds(20); // Con este tiempo marcará cada 20 milisegundos.
+            temporizadorJuego.Start(); // Inicia el temporizador.
+
+            indiceActual = indiceAparicion; // Ajusta al índice actual con el valor del índice de aparición.
+
+            // Se ubican ambos archivos mp3 dentro de la carpeta "sonidos" y agregarlos al URI correcto a continuación...
+
+            ClickedSound = new Uri("pack://siteoforigin:,,,/sonidos/clickedpop.mp3");
+            PopSound = new Uri("pack://siteoforigin:,,,/sonidos/pop.mp3");
+        }
+
+        // Dentro del método anterior, le agregaremos otro método para probar la ejecución del juego.
+
+        private void GameLoop(object sender, EventArgs e)
+        {
+            // EN INSTANTES...
         }
 
         // Método que permite clickear un elemento dentro del Canvas.
