@@ -84,7 +84,29 @@ namespace SimpleClickingGame
         // Método que permite clickear un elemento dentro del Canvas.
         private void ClickOnCanvas(object sender, MouseButtonEventArgs e)
         {
-            // EN INSTANTES...
+            // Con este evento está vinculado dentro del Canvas, pues debemos verificar si hemos hecho clic en la elipse o no.
+
+            // Si su recurso original clickeado es una elipse.
+
+            if (e.OriginalSource is Ellipse)
+            {
+                // Se crea un elipse local y se enlaza hacia su recurso original.
+
+                Ellipse circulo = (Ellipse)e.OriginalSource;
+
+                // Ahora desaparece esta elipse cuando está clickeado dentro del Canvas.
+
+                MyCanvas.Children.Remove(circulo);
+
+                // Incrementa en 1 a la puntuación.
+
+                puntuacion++;
+
+                // Carga cada uri del sonido en el que se hizo clic al reproducir y se reproduce el archivo de sonido.
+
+                hacerClick.Open(ClickedSound);
+                hacerClick.Play();
+            }
         }
 
         // Método que llama al usuario a finalizar la partida cuando gana o pierde.
