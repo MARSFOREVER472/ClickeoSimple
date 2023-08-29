@@ -127,18 +127,19 @@ namespace SimpleClickingGame
                 // Finalmente, se agrega un nuevo círculo dentro del Canvas.
 
                 MyCanvas.Children.Add(circulo);
+            }
+            
+            // El bucle "foreach" por debajo encontrará para cada elipse dentro del Canvas y la hará incrementar su tamaño.
 
-                // El bucle "foreach" por debajo encontrará para cada elipse dentro del Canvas y la hará incrementar su tamaño.
+            foreach (var x in MyCanvas.Children.OfType<Ellipse>())
+            {
+                // Se busca en el Canvas y encuentra la elipse cuando existe dentro de ella.
 
-                foreach (var x in MyCanvas.Children.OfType<Ellipse>())
-                {
-                    // Se busca en el Canvas y encuentra la elipse cuando existe dentro de ella.
+                x.Height += indiceCrecimiento; // Incrementa el valor de su altura del círculo.
+                x.Width += indiceCrecimiento; // Incrementa el valor de su ancho del círculo.
+                x.RenderTransformOrigin = new Point(0.5, 0.5); // Incrementa para el centro del círculo su valor cuando reintenta su transformación original.
 
-                    x.Height += indiceCrecimiento; // Incrementa el valor de su altura del círculo.
-                    x.Width += indiceCrecimiento; // Incrementa el valor de su ancho del círculo.
-                    x.RenderTransformOrigin = new Point(0.5, 0.5); // Incrementa para el centro del círculo su valor cuando reintenta su transformación original.
-
-                    // Si el valor de su ancho del círculo es mayor que 70 entonces se revienta por sí sola.
+                // Si el valor de su ancho del círculo es mayor que 70 entonces se revienta por sí sola.
 
                     if (Width > 70)
                     {
@@ -149,59 +150,59 @@ namespace SimpleClickingGame
                         popEfecto.Open(PopSound); // Carga esta Uri dentro del efecto de estallido.
                         popEfecto.Play(); // Reproduce este efecto.
                     }
-                } // Fin de cada bucle.
 
-                // Si su salud actual es mayor que 1.
+            } // Fin de cada bucle.
 
-                if (saludActual > 1)
-                {
-                    // Se enlaza a la barra del rectángulo de la salud con su valor en enteros.
+            // Si su salud actual es mayor que 1.
 
-                    salud.Width = saludActual;
-                }
-                else
-                {
-                    // Si su salud es menor que 1 o igual a 0 entonces llamaremos al método de finalizar el juego.
+            if (saludActual > 1)
+            {
+               // Se enlaza a la barra del rectángulo de la salud con su valor en enteros.
 
-                    gameOverFunction();
-                }
+               salud.Width = saludActual;
+            }
+            else
+            {
+               // Si su salud es menor que 1 o igual a 0 entonces llamaremos al método de finalizar el juego.
 
-                // Para eliminar una elipse dentro del juego creamos otro bucle "foreach".
+               gameOverFunction();
+            }
 
-                foreach (Ellipse i in eliminarElipses)
-                {
-                    // Con este bucle buscaremos para cada elipse cuando existe dentro del Canvas para luego eliminarlo dentro de esta lista.
+            // Para eliminar una elipse dentro del juego creamos otro bucle "foreach".
 
-                    MyCanvas.Children.Remove(i); // Si encuentra una elipse y lo elimina dentro de ella.
-                }
+            foreach (Ellipse i in eliminarElipses)
+            {
+                // Con este bucle buscaremos para cada elipse cuando existe dentro del Canvas para luego eliminarlo dentro de esta lista.
 
-                // Si su puntuación es mayor que 5.
+                MyCanvas.Children.Remove(i); // Si encuentra una elipse y lo elimina dentro de ella.
+            }
 
-                if (puntuacion > 5)
-                {
-                    // Incrementa la velocidad de su índice al aparecer cada círculo.
+            // Si su puntuación es mayor que 5.
 
-                    indiceAparicion = 25;
-                }
+            if (puntuacion > 5)
+            {
+                // Incrementa la velocidad de su índice al aparecer cada círculo.
 
-                // Si su puntuación es mayor que 20.
+                indiceAparicion = 25;
+            }
 
-                if (puntuacion > 20)
-                {
-                    // Se aplicará la misma situación anteriormente pero crecerá más rápido.
+            // Si su puntuación es mayor que 20.
 
-                    indiceAparicion = 15;
-                    indiceCrecimiento = 1.5;
-                }
+            if (puntuacion > 20)
+            {
+                // Se aplicará la misma situación anteriormente pero crecerá más rápido.
+
+                indiceAparicion = 15;
+                indiceCrecimiento = 1.5;
             }
         }
-
+    
         // Método que permite clickear un elemento dentro del Canvas.
         private void ClickOnCanvas(object sender, MouseButtonEventArgs e)
         {
             // Con este evento está vinculado dentro del Canvas, pues debemos verificar si hemos hecho clic en la elipse o no.
 
-            // Si su recurso original clickeado es una elipse.
+            // Si su recurso original cliqueado es una elipse.
 
             if (e.OriginalSource is Ellipse)
             {
@@ -228,7 +229,41 @@ namespace SimpleClickingGame
 
         private void gameOverFunction()
         {
-            // EN INSTANTES...
+            // Esta es la función de finalizar el juego.
+
+            temporizadorJuego.Stop(); // Paraliza el temporizador por primera vez.
+
+            // Se muestra un mensaje de ventana al final de la pantalla y espera al jugador para darle un consejo sorpresa XD.
+
+            MessageBox.Show("Fin del juego" + Environment.NewLine + "Usted obtuvo: " + puntuacion + Environment.NewLine + "Ya Po, Compadre Poh!");
+
+            // Después de que el jugador haya visto esta penitencia tenemos que hacer algo respecto a este bucle ("foreach").
+
+            foreach (var y in MyCanvas.Children.OfType<Ellipse>())
+            {
+                // Se busca todas las elipses existentes que están en la pantalla y luego las agrega a esta lista.
+
+                eliminarElipses.Add(y);
+            }
+
+            // Aquí necesitaremos otro bucle "foreach" para eliminar todo lo que hay dentro de eliminar en esta lista.
+
+            foreach (Ellipse i in eliminarElipses)
+            {
+                MyCanvas.Children.Remove(i);
+            }
+
+            // Se reestablecen todos los valores del juego a la de los predeterminados, incluida la eliminación de todas las elipses de eliminar esta lista.
+
+            indiceCrecimiento = .6;
+            indiceAparicion = 60;
+            puntuacionFinal = puntuacion;
+            puntuacion = 0;
+            indiceActual = 5;
+            saludActual = 300;
+            eliminarElipses.Clear();
+            temporizadorJuego.Start();
+
         }
     }
 }
